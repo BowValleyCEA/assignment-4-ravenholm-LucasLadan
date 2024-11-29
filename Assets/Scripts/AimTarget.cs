@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
 
 public class AimTarget : MonoBehaviour, ITargetable
@@ -30,5 +31,7 @@ public class AimTarget : MonoBehaviour, ITargetable
     public void StopTarget()
     {
         _currentMaterial.color = initialColor;
+        gameObject.GetComponent<Rigidbody>().useGravity = true;
+        gameObject.transform.SetParent(null);
     }
 }
