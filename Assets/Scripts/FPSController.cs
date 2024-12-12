@@ -10,8 +10,15 @@ public class FPSController : MonoBehaviour
     private CharacterController _controller;
     [SerializeField] private float mouseSensitivity = 200f;
     [SerializeField] private float speed = 5f;
+    [SerializeField] private float jumpHeight;
+    private float JumpSpeed = 0;
+    private float gravity = -9.81f;
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
     [SerializeField] private Camera camera;
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
     [SerializeField] private float xCameraBounds = 60f;
+    [SerializeField] private int maxHealth;
+    private int health;
     
     #region Smoothing code
     private Vector2 _currentMouseDelta;
@@ -22,6 +29,7 @@ public class FPSController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        health = maxHealth;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -36,6 +44,7 @@ public class FPSController : MonoBehaviour
     {
         Movement();
         Rotation();
+        Jumping();
     }
 
     private void Movement()
@@ -43,7 +52,22 @@ public class FPSController : MonoBehaviour
         //_moveVector = new Vector3(Input.GetAxis("Horizontal"),0, Input.GetAxis("Vertical")) * speed * Time.deltaTime;//initial way of showing movement
         _moveVector = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal"); //easier to explain after by using the forward and right vectors
         _moveVector.Normalize();
-        _controller.SimpleMove(_moveVector * speed );
+        
+
+        if (JumpSpeed < 0 && _controller.isGrounded)
+        {
+            JumpSpeed = 0;
+
+        }
+
+        if (_controller.isGrounded && Input.GetButton("Jump"))
+        {
+            Debug.Log("jumping");
+            JumpSpeed += (float)Math.Sqrt(jumpHeight * -2 * gravity);
+        }
+
+        JumpSpeed += gravity * Time.deltaTime * 1.25f;
+        _controller.Move(new Vector3(_moveVector.x * speed, JumpSpeed , _moveVector.z *speed)*Time.deltaTime);
     }
 
     private void Rotation()
@@ -58,6 +82,23 @@ public class FPSController : MonoBehaviour
         camera.transform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
     }
 
+    private void Jumping()
+    {
+        
+    }
+
+    public void takeDamage (int damage)
+    {
+
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Checkpoint")
+        {
+
+        }
+    }
     private void LateUpdate()
     {
 
