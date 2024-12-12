@@ -11,7 +11,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] private float mouseSensitivity = 200f;
     [SerializeField] private float speed = 5f;
     [SerializeField] private float jumpHeight;
-    private float JumpSpeed = 0;
+    private float jumpSpeed = 0;
     private float gravity = -9.81f;
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
     [SerializeField] private Camera camera;
@@ -19,6 +19,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] private float xCameraBounds = 60f;
     [SerializeField] private int maxHealth;
     private int health;
+    private Vector3 respawnPos = new Vector3(0,0,0);//You cannot die before reaching a proper checkpoint
     
     #region Smoothing code
     private Vector2 _currentMouseDelta;
@@ -32,6 +33,7 @@ public class FPSController : MonoBehaviour
         health = maxHealth;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        FindAnyObjectByType<RespawnSystem>().Respawn.AddListener(Respawn);
     }
 
     void Awake()
@@ -54,20 +56,20 @@ public class FPSController : MonoBehaviour
         _moveVector.Normalize();
         
 
-        if (JumpSpeed < 0 && _controller.isGrounded)
+        if (jumpSpeed < 0 && _controller.isGrounded)
         {
-            JumpSpeed = 0;
+            jumpSpeed = 0;
 
         }
 
         if (_controller.isGrounded && Input.GetButton("Jump"))
         {
             Debug.Log("jumping");
-            JumpSpeed += (float)Math.Sqrt(jumpHeight * -2 * gravity);
+            jumpSpeed += (float)Math.Sqrt(jumpHeight * -2 * gravity);
         }
 
-        JumpSpeed += gravity * Time.deltaTime * 1.25f;
-        _controller.Move(new Vector3(_moveVector.x * speed, JumpSpeed , _moveVector.z *speed)*Time.deltaTime);
+        jumpSpeed += gravity * Time.deltaTime * 1.25f;
+        _controller.Move(new Vector3(_moveVector.x * speed, jumpSpeed , _moveVector.z *speed)*Time.deltaTime);
     }
 
     private void Rotation()
@@ -87,16 +89,22 @@ public class FPSController : MonoBehaviour
         
     }
 
-    public void takeDamage (int damage)
+    public void killPlayer (int damage)
     {
-
+        FindObjectOfType<RespawnSystem>().onDeath();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void Respawn()
+    {
+        Debug.Log("Moved player");
+        gameObject.transform.position = respawnPos;
+    }
+
+    private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.tag == "Checkpoint")
         {
-
+            respawnPos = collision.gameObject.transform.position;
         }
     }
     private void LateUpdate()

@@ -13,6 +13,14 @@ public class RespawnSystem : MonoBehaviour
         
     }
 
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            onDeath();
+        }
+    }
     // Update is called once per frame
     public void onDeath()
     {
