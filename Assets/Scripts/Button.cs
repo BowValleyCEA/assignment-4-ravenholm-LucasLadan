@@ -6,13 +6,22 @@ public class Button : MonoBehaviour
 {
 
     [SerializeField] private GameObject door;
+    [SerializeField] private bool reversed;
     // Start is called before the first frame update
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Grabbable")
         {
-            door.GetComponent<Collider>().isTrigger = true;
-            door.GetComponent<MeshRenderer>().enabled = false;
+            if (reversed)
+            {
+                door.GetComponent<Collider>().isTrigger = false;
+                door.GetComponent<MeshRenderer>().enabled = true;
+            }
+            else
+            {
+                door.GetComponent<Collider>().isTrigger = true;
+                door.GetComponent<MeshRenderer>().enabled = false;
+            }
         }
     }
 
@@ -20,8 +29,16 @@ public class Button : MonoBehaviour
     {
         if (other.tag == "Grabbable")
         {
-            door.GetComponent<Collider>().isTrigger = false;
-            door.GetComponent<MeshRenderer>().enabled = true;
+            if (!reversed)
+            {
+                door.GetComponent<Collider>().isTrigger = false;
+                door.GetComponent<MeshRenderer>().enabled = true;
+            }
+            else
+            {
+                door.GetComponent<Collider>().isTrigger = true;
+                door.GetComponent<MeshRenderer>().enabled = false;
+            }
         }
     }
 }
