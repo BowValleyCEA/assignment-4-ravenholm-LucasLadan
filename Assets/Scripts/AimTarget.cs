@@ -42,7 +42,7 @@ public class AimTarget : MonoBehaviour, ITargetable
         gameObject.transform.SetParent(null);
     }
 
-    public void OnRespawn()
+    public void OnRespawn()//Moves the objects to where they first appear
     {
         gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         gameObject.transform.position = spawnPosition;

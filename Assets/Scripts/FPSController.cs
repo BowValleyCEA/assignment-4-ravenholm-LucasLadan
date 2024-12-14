@@ -84,12 +84,12 @@ public class FPSController : MonoBehaviour
     }
 
 
-    public void killPlayer ()
+    public void killPlayer ()//This just kills the player
     {
         FindObjectOfType<RespawnSystem>().onDeath();
     }
 
-    public void Respawn()
+    public void Respawn()//Moves the player back to the last touched checkpoint
     {
         _controller.enabled = false;
         gameObject.transform.position = respawnPos;
@@ -98,9 +98,9 @@ public class FPSController : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.tag == "Checkpoint")
+        if (collision.gameObject.tag == "Checkpoint")//Checks if the thing the player touched is a checkpoint
         {
-            respawnPos = collision.gameObject.transform.position;
+            respawnPos = collision.gameObject.transform.position;//Updates the position the player teleports to when respawning
         }
     }
     private void LateUpdate()

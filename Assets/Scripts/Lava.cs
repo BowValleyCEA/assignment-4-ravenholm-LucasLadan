@@ -8,7 +8,7 @@ public class Lava : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         Debug.Log(collision.gameObject.name);
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")//Checking if the player touched it
         {
             Debug.Log("Died");
             collision.gameObject.GetComponent<FPSController>().killPlayer();

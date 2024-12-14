@@ -7,11 +7,6 @@ public class RespawnSystem : MonoBehaviour
 {
 
     public UnityEvent Respawn;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
 
     private void Update()
@@ -21,7 +16,7 @@ public class RespawnSystem : MonoBehaviour
             onDeath();
         }
     }
-    // Update is called once per frame
+    
     public void onDeath()
     {
         Respawn.Invoke();
