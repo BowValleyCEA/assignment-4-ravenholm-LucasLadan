@@ -20,6 +20,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] private int maxHealth;
     private int health;
     private Vector3 respawnPos = new Vector3(0,0,0);//You cannot die before reaching a proper checkpoint
+    private bool resumed = true;
     
     #region Smoothing code
     private Vector2 _currentMouseDelta;
@@ -44,8 +45,11 @@ public class FPSController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement();
-        Rotation();
+        if (resumed)
+        {
+            Movement();
+            Rotation();
+        }
     }
 
     private void Movement()
@@ -103,9 +107,9 @@ public class FPSController : MonoBehaviour
             respawnPos = collision.gameObject.transform.position;//Updates the position the player teleports to when respawning
         }
     }
-    private void LateUpdate()
+    
+    public void setResume(bool input)
     {
-
-        
+        resumed = input;
     }
 }
