@@ -111,5 +111,16 @@ public class FPSController : MonoBehaviour
     public void setResume(bool input)
     {
         resumed = input;
+        
+        if (input)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 }
