@@ -46,7 +46,6 @@ public class FPSController : MonoBehaviour
     {
         Movement();
         Rotation();
-        Jumping();
     }
 
     private void Movement()
@@ -84,20 +83,17 @@ public class FPSController : MonoBehaviour
         camera.transform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
     }
 
-    private void Jumping()
-    {
-        
-    }
 
-    public void killPlayer (int damage)
+    public void killPlayer ()
     {
         FindObjectOfType<RespawnSystem>().onDeath();
     }
 
     public void Respawn()
     {
-        Debug.Log("Moved player");
+        _controller.enabled = false;
         gameObject.transform.position = respawnPos;
+        _controller.enabled = true;
     }
 
     private void OnTriggerEnter(Collider collision)
